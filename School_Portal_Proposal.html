@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>School Management Portal — Proposal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     EDIT PRICES & TEXT IN ONE PLACE → the CONFIG block in <script> at the bottom.
+     All amounts are in INR.
+     ============================================================ */
+  :root{
+    --paper:#F4F7F8;--surface:#FFFFFF;--ink:#13272D;--ink-soft:#3F5A63;--muted:#6E848C;
+    --brand:#0E6E7E;--brand-dark:#0A5260;--accent:#E2912F;--accent-soft:#FBEBD2;
+    --included:#2C7C58;--included-soft:#E4F2EA;--line:#E1E9EB;
+    --shadow:0 1px 2px rgba(19,39,45,.04), 0 8px 24px rgba(19,39,45,.06);--radius:16px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.num{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-.01em}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+  /* header */
+  .top{background:linear-gradient(160deg,var(--brand-dark),var(--brand));color:#fff}
+  .top .wrap{padding:30px 22px 34px}
+  .vendor{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;opacity:.92}
+  .vendor .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+  .top h1{font-size:clamp(26px,4.4vw,40px);line-height:1.08;margin:14px 0 8px;font-weight:700}
+  .top p.lede{font-size:clamp(15px,1.9vw,18px);max-width:640px;margin:0;opacity:.94}
+  .top .meta{margin-top:18px;display:flex;gap:18px;flex-wrap:wrap;font-size:13px;opacity:.85}
+
+  /* how */
+  .how{background:var(--surface);border-bottom:1px solid var(--line)}
+  .how .wrap{padding:18px 22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .how .step{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--ink-soft);font-weight:500}
+  .how .n{width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--brand-dark);display:grid;place-items:center;font-weight:700;font-size:13px;font-family:'Space Grotesk',sans-serif}
+  .how .arrow{color:var(--line);font-weight:700}
+
+  /* presets */
+  .presets{padding:26px 0 4px}
+  .presets h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0 0 12px;font-family:'Inter',sans-serif;font-weight:700}
+  .preset-row{display:flex;gap:12px;flex-wrap:wrap}
+  .preset{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;cursor:pointer;text-align:left;min-width:165px;transition:border-color .15s,transform .15s,box-shadow .15s;font:inherit;color:inherit}
+  .preset:hover{border-color:var(--brand);transform:translateY(-1px)}
+  .preset.active{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .preset .pname{font-weight:700;font-size:15px}
+  .preset .pdesc{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+  /* layout */
+  .layout{display:grid;grid-template-columns:1fr;gap:26px;padding:26px 0 40px}
+  @media(min-width:920px){.layout{grid-template-columns:1fr 350px;align-items:start}}
+  section.block{margin-bottom:26px}
+  .block-title{display:flex;align-items:baseline;gap:10px;margin:0 0 14px;flex-wrap:wrap}
+  .block-title h2{font-size:19px;margin:0;font-weight:700}
+  .block-title .hint{font-size:13px;color:var(--muted)}
+
+  /* core */
+  .core{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .core-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:20px 22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff,#fbfdfd)}
+  .core-head .t h3{margin:0;font-size:18px}
+  .core-head .t p{margin:4px 0 0;font-size:13.5px;color:var(--muted);max-width:420px}
+  .badge-incl{background:var(--included-soft);color:var(--included);font-weight:700;font-size:11.5px;padding:5px 10px;border-radius:20px;white-space:nowrap;letter-spacing:.02em}
+  .core-price{padding:14px 22px;display:flex;justify-content:space-between;align-items:center;background:#fff}
+  .core-price .lab{font-size:13.5px;color:var(--ink-soft);font-weight:500}
+  .core-price .val{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px}
+  .core-list{list-style:none;margin:0;padding:6px 22px 20px;columns:2;column-gap:26px;font-size:13.5px}
+  @media(max-width:560px){.core-list{columns:1}}
+  .core-list li{break-inside:avoid;padding:5px 0 5px 24px;position:relative;color:var(--ink-soft)}
+  .core-list li::before{content:"";position:absolute;left:0;top:9px;width:14px;height:14px;border-radius:50%;background:var(--included-soft);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232C7C58' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");background-size:10px;background-repeat:no-repeat;background-position:center}
+
+  /* modules */
+  .modules{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:600px){.modules{grid-template-columns:1fr 1fr}}
+  .module{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);padding:18px 18px 16px;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .12s;position:relative;display:flex;flex-direction:column}
+  .module:hover{border-color:var(--brand);transform:translateY(-1px)}
+  .module:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .module.is-selected{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .module h3{margin:0;font-size:15.5px;font-weight:700;line-height:1.25}
+  .module .m-desc{font-size:13px;color:var(--muted);margin:8px 0 0;flex:1}
+  .module .m-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+  .module .m-price{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:var(--ink)}
+  .module .m-price small{font-weight:500;font-size:11.5px;color:var(--muted)}
+  .toggle{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--brand);border:1.5px solid var(--brand);border-radius:20px;padding:5px 11px 5px 9px;transition:.15s}
+  .check{width:15px;height:15px;border-radius:5px;border:2px solid currentColor;display:grid;place-items:center}
+  .check svg{width:10px;height:10px;opacity:0;transition:opacity .12s}
+  .is-selected .toggle{background:var(--accent);border-color:var(--accent);color:#fff}
+  .is-selected .toggle .check svg{opacity:1}
+  .is-selected .toggle .lbl-add{display:none}
+  .toggle .lbl-added{display:none}
+  .is-selected .toggle .lbl-added{display:inline}
+
+  /* summary */
+  aside{position:sticky;top:18px}
+  .summary{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .summary h2{margin:0;padding:18px 20px 14px;font-size:16px;border-bottom:1px solid var(--line)}
+  .sum-lines{padding:8px 20px;font-size:13.5px}
+  .sum-line{display:flex;justify-content:space-between;gap:12px;padding:7px 0;color:var(--ink-soft)}
+  .sum-line .nm{display:flex;gap:7px;align-items:baseline}
+  .sum-line .nm .tick{color:var(--accent);font-weight:700}
+  .sum-line.base{color:var(--ink);font-weight:600}
+  .sum-empty{padding:6px 0;color:var(--muted);font-size:13px}
+  .sum-divider{height:1px;background:var(--line);margin:8px 20px}
+  .sum-total{padding:14px 20px;background:linear-gradient(180deg,#fff,#fbfdfd)}
+  .sum-total .row{display:flex;justify-content:space-between;align-items:baseline}
+  .sum-total .row .k{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+  .sum-total .big{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;color:var(--ink)}
+  .sum-total .once{font-size:12px;color:var(--muted);margin-top:2px}
+  .sum-then{padding:12px 20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft)}
+  .sum-then .r-line{display:flex;justify-content:space-between;padding:3px 0}
+  .sum-then b{color:var(--ink)}
+  .sum-note{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5}
+  .sum-actions{padding:14px 20px 18px;display:flex;gap:10px;flex-direction:column}
+  .leadform{display:flex;flex-direction:column;gap:9px;margin-top:4px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfdfd}
+  .leadform .lf-title{font-weight:700;font-size:13.5px;margin-bottom:2px}
+  .lf-in{font:inherit;font-size:14px;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+  .lf-in:focus{outline:none;border-color:var(--brand)}
+  .lf-msg{font-size:12.5px;line-height:1.5;color:var(--included);font-weight:600}
+  .lf-msg.err{color:#b4453a}
+  .btn{font:inherit;font-weight:700;font-size:14px;border-radius:11px;padding:12px 14px;cursor:pointer;border:1.5px solid transparent;transition:.15s;text-align:center;display:block;text-decoration:none}
+  .btn-primary{background:var(--brand);color:#fff}
+  .btn-primary:hover{background:var(--brand-dark)}
+  .btn-ghost{background:#fff;color:var(--brand);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--brand)}
+
+  /* ===== complete cash-flow section ===== */
+  .cash{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .cash .wrap{padding:40px 22px 14px}
+  .cash .lead h2{font-size:23px;margin:0 0 6px}
+  .cash .lead p{margin:0 0 4px;color:var(--ink-soft);font-size:15px;max-width:660px}
+  .cash-cards{display:grid;grid-template-columns:1fr;gap:16px;margin:24px 0 8px}
+  @media(min-width:820px){.cash-cards{grid-template-columns:repeat(3,1fr)}}
+  .cc{border:1px solid var(--line);border-radius:var(--radius);padding:20px;background:#fff;display:flex;flex-direction:column}
+  .cc .cc-tag{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 10px;border-radius:20px;align-self:flex-start}
+  .cc.once .cc-tag{background:var(--accent-soft);color:#9a5a12}
+  .cc.year .cc-tag{background:#E6F0F2;color:var(--brand-dark)}
+  .cc.use  .cc-tag{background:var(--included-soft);color:var(--included)}
+  .cc h3{font-size:16px;margin:14px 0 2px}
+  .cc .cc-amt{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;margin:6px 0 2px}
+  .cc .cc-amt small{font-size:13px;color:var(--muted);font-weight:500}
+  .cc .cc-sub{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+  .cc .cc-items{list-style:none;margin:8px 0 0;padding:0;font-size:13px;border-top:1px dashed var(--line)}
+  .cc .cc-items li{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line);color:var(--ink-soft)}
+  .cc .cc-items li .v{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--ink);white-space:nowrap}
+  .cc .cc-items li .nt{display:block;font-size:11px;color:var(--muted);font-weight:400;font-family:'Inter',sans-serif}
+  .cc .cc-foot{margin-top:auto;padding-top:12px;font-size:12px;color:var(--muted)}
+  .cc-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-top:10px;border-top:2px solid var(--line)}
+  .cc-total .k{font-weight:700;font-size:13px}
+  .cc-total .v{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px}
+
+  /* multi-year strip */
+  .years{margin:22px 0 6px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .years .yhead{padding:14px 18px;background:linear-gradient(180deg,#fff,#fbfdfd);border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px}
+  .years .yhead .ynote{font-size:12px;color:var(--muted);font-weight:500}
+  .yrow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line);font-size:14px;align-items:baseline}
+  .yrow:last-child{border-bottom:none}
+  .yrow .yl{color:var(--ink-soft)}
+  .yrow .yl b{color:var(--ink)}
+  .yrow .yl small{display:block;color:var(--muted);font-size:12px}
+  .yrow .yv{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;white-space:nowrap}
+  .yrow.total{background:#FCF7EE}
+  .yrow.total .yv{color:#9a5a12}
+  .cash .foot-line{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.6}
+
+  /* mobile bar */
+  .mobilebar{display:none}
+  @media(max-width:919px){
+    aside{position:static}
+    .mobilebar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(19,39,45,.08);padding:11px 16px;align-items:center;justify-content:space-between;gap:12px}
+    .mobilebar .mb-l .mb-cap{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+    .mobilebar .mb-l .mb-amt{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:21px}
+    .mobilebar .mb-l .mb-then{font-size:11px;color:var(--muted)}
+    .mobilebar .btn{padding:11px 18px}
+  }
+
+  /* footer */
+  footer.foot{background:var(--ink);color:#cfe0e3;padding:34px 0 90px}
+  @media(min-width:920px){footer.foot{padding-bottom:40px}}
+  footer.foot .wrap{display:grid;gap:24px;grid-template-columns:1fr}
+  @media(min-width:760px){footer.foot .wrap{grid-template-columns:1.3fr 1fr}}
+  footer.foot h3{color:#fff;font-size:16px;margin:0 0 10px}
+  footer.foot p,footer.foot li{font-size:13.5px;line-height:1.65}
+  footer.foot ul{margin:0;padding-left:18px}
+  footer.foot a{color:var(--accent);text-decoration:none}
+  .foot-contact .c-row{margin:5px 0;font-size:14px}
+  .foot-terms{border-top:1px solid rgba(255,255,255,.12);margin-top:24px;padding-top:16px;font-size:12px;color:#8fa9ad}
+
+  @media print{
+    body{background:#fff}
+    .mobilebar{display:none!important}.preset{display:none}
+    aside{position:static}.sum-actions{display:none}
+    .top{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .module:not(.is-selected){display:none}
+    .layout{padding-bottom:20px}
+    footer.foot{padding-bottom:30px}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="vendor"><span class="dot"></span><span id="v-name"></span></div>
+    <h1>School Management Portal<br>Pick what you need. See the full cost.</h1>
+    <p class="lede" id="v-lede"></p>
+    <div class="meta">
+      <span>One web dashboard + a mobile app (Android &amp; iOS)</span><span>•</span>
+      <span>English &amp; Malayalam</span><span>•</span>
+      <span id="v-validity"></span>
+    </div>
+  </div>
+</header>
+
+<div class="how">
+  <div class="wrap">
+    <div class="step"><span class="n">1</span> Start with a ready bundle</div>
+    <span class="arrow">→</span>
+    <div class="step"><span class="n">2</span> Add or remove features</div>
+    <span class="arrow">→</span>
+    <div class="step"><span class="n">3</span> See your full cost below</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="presets">
+    <h2>Pick a starting point</h2>
+    <div class="preset-row" id="presetRow"></div>
+  </div>
+
+  <div class="layout">
+    <main>
+      <section class="block">
+        <div class="block-title"><h2>The foundation</h2><span class="hint">Included in every plan</span></div>
+        <div class="core">
+          <div class="core-head">
+            <div class="t"><h3 id="core-title"></h3><p id="core-sub"></p></div>
+            <span class="badge-incl">ALWAYS INCLUDED</span>
+          </div>
+          <ul class="core-list" id="coreList"></ul>
+          <div class="core-price"><span class="lab">Foundation (one-time)</span><span class="val" id="basePrice"></span></div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-title"><h2>Add what your school needs</h2><span class="hint">Tap a card to add or remove it</span></div>
+        <div class="modules" id="modules"></div>
+      </section>
+    </main>
+
+    <aside>
+      <div class="summary">
+        <h2>Your plan</h2>
+        <div class="sum-lines" id="sumLines"></div>
+        <div class="sum-divider"></div>
+        <div class="sum-total">
+          <div class="row"><span class="k">Pay once (to build it)</span><span class="big" id="totalOnce"></span></div>
+          <div class="once" id="onceNote"></div>
+        </div>
+        <div class="sum-then" id="thenBlock"></div>
+        <div class="sum-actions">
+          <button class="btn btn-primary" id="sendBtn">Send this plan to us</button>
+          <button class="btn btn-ghost" id="printBtn">Save / print for our records</button>
+          <div class="leadform" id="leadForm" hidden>
+            <div class="lf-title">Send us your chosen plan</div>
+            <input class="lf-in" id="lf-name" type="text" placeholder="Your name" autocomplete="name">
+            <input class="lf-in" id="lf-school" type="text" placeholder="School name" autocomplete="organization">
+            <input class="lf-in" id="lf-phone" type="tel" placeholder="Phone number" autocomplete="tel">
+            <button class="btn btn-primary" id="lf-submit">Send my plan</button>
+            <div class="lf-msg" id="lf-msg"></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ===== COMPLETE CASH FLOW ===== -->
+<section class="cash" id="cashflow">
+  <div class="wrap">
+    <div class="lead">
+      <h2>What it costs, in full</h2>
+      <p>Here is what the school pays, and when. There are three kinds of cost.</p>
+    </div>
+
+    <div class="cash-cards">
+      <div class="cc once">
+        <span class="cc-tag">① Pay once</span>
+        <h3>Building the system</h3>
+        <div class="cc-amt" id="cc-once-amt"></div>
+        <div class="cc-sub">A one-time cost. After this, the school owns the system.</div>
+        <ul class="cc-items" id="cc-once-items"></ul>
+        <div class="cc-foot" id="cc-once-foot"></div>
+      </div>
+
+      <div class="cc year">
+        <span class="cc-tag">② Every year</span>
+        <h3>Keeping it running</h3>
+        <div class="cc-amt" id="cc-year-amt"></div>
+        <div class="cc-sub" id="cc-year-sub"></div>
+        <ul class="cc-items" id="cc-year-items"></ul>
+        <div class="cc-total"><span class="k">Total each year</span><span class="v" id="cc-year-total"></span></div>
+      </div>
+
+      <div class="cc use">
+        <span class="cc-tag">③ Only what you use</span>
+        <h3>Messages to parents</h3>
+        <div class="cc-amt" id="cc-use-amt"></div>
+        <div class="cc-sub">Pay only for what is actually sent. No fixed fee.</div>
+        <ul class="cc-items" id="cc-use-items"></ul>
+        <div class="cc-foot" id="cc-use-foot"></div>
+      </div>
+    </div>
+
+    <div class="years">
+      <div class="yhead"><span>What it looks like over three years</span><span class="ynote">Messages billed separately, only as used</span></div>
+      <div id="yearRows"></div>
+    </div>
+
+    <p class="foot-line" id="cash-foot"></p>
+  </div>
+</section>
+
+<footer class="foot" id="contact">
+  <div class="wrap">
+    <div>
+      <h3>What "keeping it running" includes</h3>
+      <ul id="supportIncludes"></ul>
+      <p class="foot-terms" id="foot-terms"></p>
+    </div>
+    <div class="foot-contact">
+      <h3>Next step</h3>
+      <p>Pick the features above and send us the plan. We'll confirm the timeline and get started.</p>
+      <p>Payment can be staged across the build, for example 40% to begin, 30% at the testing stage, and 30% on go-live. Your first year of hosting and support is included.</p>
+      <div class="c-row" id="c-name"></div>
+      <div class="c-row" id="c-email"></div>
+      <div class="c-row" id="c-phone"></div>
+    </div>
+  </div>
+</footer>
+
+<div class="mobilebar">
+  <div class="mb-l">
+    <div class="mb-cap">Pay once</div>
+    <div class="mb-amt" id="mbAmt"></div>
+    <div class="mb-then" id="mbThen"></div>
+  </div>
+  <a class="btn btn-primary" href="#cashflow">See all costs</a>
+</div>
+
+<script>
+/* ============================================================================
+   ⚙️  EDIT EVERYTHING HERE — prices (INR), descriptions, your contact.
+   Numbers are plain integers (no commas).
+   Hosting figures below are the MANAGED setup (Supabase + Vercel + Apple).
+   If you self-host on a VPS, lower the "infrastructure" numbers accordingly.
+   ============================================================================ */
+const CONFIG = {
+  vendor:{
+    name:"Built by Anaswer Ajay",
+    lede:"Choose the features your school needs and the total updates as you go. You'll see what it costs to build, and what it costs to run each year.",
+    validity:"Estimate valid for 30 days",
+    contactName:"Anaswer Ajay",
+    contactEmail:"anaswer.impluse@gmail.com",
+    contactPhone:"+91 94969 15574"
+  },
+
+  /* ---- HOW YOU GET NOTIFIED when a school sends their plan ----
+     Set ONE or BOTH. Leave a value empty ("") to switch that path off.
+       whatsapp     : your number with country code, digits only, no + or spaces
+                      e.g. India 9447012345 → "919447012345"  (this is the simplest, no signup)
+       web3formsKey : optional. Free at https://web3forms.com — paste the access key
+                      to ALSO get an email every time a school submits.            */
+  lead:{
+    whatsapp:"919496915574",   // your WhatsApp number, digits only
+    web3formsKey:""            // optional email key, leave "" if not using
+  },
+
+  /* ---- ① ONE-TIME: the build ---- */
+  base:{
+    title:"Core school platform",
+    sub:"Everything a school needs to run day to day. All of this is included, not charged extra.",
+    price:149000,
+    includes:[
+      "Secure logins for everyone (parents sign in with a code on their phone)",
+      "Separate portals for the office, teachers, parents and students",
+      "Android app, iPhone app and web dashboard",
+      "Student, parent and staff records",
+      "Classes, divisions and subjects set up your way",
+      "Daily attendance with automatic percentages",
+      "Exams, marks and Kerala-style grade reports (A+ to E)",
+      "Printable report cards and marksheets",
+      "Homework and notes, with student submissions and teacher feedback",
+      "Leave requests (parents apply, the class teacher approves)",
+      "School announcements and messaging between teachers and parents",
+      "Instant alerts inside the app",
+      "Works in English and Malayalam",
+      "We import your existing student data for you",
+      "App Store and Play Store publishing handled for you",
+      "Full change history (who edited what, and when)"
+    ]
+  },
+  addons:[
+    {id:"fees",     name:"Online fee collection",  price:40000, desc:"Parents pay fees online and get a receipt straight away. Your office can see who has paid and who still owes, and send reminders automatically."},
+    {id:"whatsapp", name:"WhatsApp alerts",        price:10000, desc:"Send absence notices and important updates straight to parents on WhatsApp."},
+    {id:"timetable",name:"Timetable builder",      price:18000, desc:"Build class timetables and publish them for students and parents to see."},
+    {id:"analytics",name:"Insight dashboards",     price:15000, desc:"Clear charts for the principal showing attendance, results and how each class is doing."},
+    {id:"offline",  name:"Works offline",          price:15000, desc:"Teachers can mark attendance with no internet in the classroom. It saves and updates on its own once the connection is back."}
+  ],
+
+  /* small one-time store fees are absorbed into the build above, so the headline stays clean */
+  oneTimeFees:[],
+  /* first-year line: hosting + support for year one is bundled into the build above */
+  firstYearIncluded:true,
+
+  /* ---- ② EVERY YEAR: hosting + support (recalculated at USD = ₹96, sized for a 300–500 student school) ---- */
+  infrastructure:{
+    note:"These go to the service providers, not to us, and are billed in US dollars, so the rupee figure can move a little with the exchange rate. Sized for a small school and shown at actual cost.",
+    items:[
+      {name:"Cloud hosting (servers, database, backups)", value:24000, note:"Sized for 300–500 students"},
+      {name:"Apple App Store account",                    value:9500,  note:"Apple's yearly fee to keep the iPhone app live"},
+      {name:"Domain name (web address)",                  value:1200,  note:"Your portal's address"}
+    ]
+  },
+  support:{
+    name:"Support &amp; maintenance (our work)",
+    value:32000,
+    includes:[
+      "Keeping the app working as phones and operating systems update",
+      "Security updates and bug fixes",
+      "Re-publishing the app whenever Apple or Google require it",
+      "Setting up each new academic year",
+      "Email and phone support for your office staff and teachers"
+    ]
+  },
+
+  /* ---- ③ PAY-AS-YOU-USE: messages ---- */
+  messaging:{
+    estLow:150, estHigh:600,
+    items:[
+      {name:"App notifications", value:"Free", note:"Sent inside the app, no cost"},
+      {name:"SMS (login codes, absence)", value:"~₹0.20 each", note:"Only for what you send"},
+      {name:"WhatsApp messages", value:"From ~₹0.15 each", note:"+ ₹500/month per WhatsApp number"}
+    ],
+    foot:"Most of the time you'll use the free app alerts, so this usually comes to a few hundred rupees a month."
+  }
+};
+
+/* ===================== logic (no need to edit) ===================== */
+const inr = n => "₹" + Number(n).toLocaleString("en-IN");
+const selected = new Set();
+
+// header / footer text
+document.getElementById("v-name").textContent    = CONFIG.vendor.name;
+document.getElementById("v-lede").textContent     = CONFIG.vendor.lede;
+document.getElementById("v-validity").textContent = CONFIG.vendor.validity;
+document.getElementById("core-title").textContent = CONFIG.base.title;
+document.getElementById("core-sub").textContent   = CONFIG.base.sub;
+document.getElementById("basePrice").textContent  = inr(CONFIG.base.price);
+document.getElementById("c-name").textContent     = CONFIG.vendor.contactName;
+document.getElementById("c-email").innerHTML       = '<a href="mailto:'+CONFIG.vendor.contactEmail+'">'+CONFIG.vendor.contactEmail+'</a>';
+document.getElementById("c-phone").textContent    = CONFIG.vendor.contactPhone;
+document.getElementById("foot-terms").textContent =
+  "All amounts are in Indian Rupees (INR) and are an estimate, not a final invoice. " + CONFIG.vendor.validity + ".";
+document.getElementById("supportIncludes").innerHTML =
+  CONFIG.support.includes.map(t=>"<li>"+t+"</li>").join("");
+
+// core list
+document.getElementById("coreList").innerHTML = CONFIG.base.includes.map(t=>"<li>"+t+"</li>").join("");
+
+// modules
+const checkSVG='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+document.getElementById("modules").innerHTML = CONFIG.addons.map(a=>`
+  <div class="module" role="checkbox" aria-checked="false" tabindex="0" data-id="${a.id}">
+    <div class="m-top"><h3>${a.name}</h3></div>
+    <p class="m-desc">${a.desc}</p>
+    <div class="m-foot">
+      <span class="m-price">+ ${inr(a.price)} <small>one-time</small></span>
+      <span class="toggle"><span class="check">${checkSVG}</span><span class="lbl-add">Add</span><span class="lbl-added">Added</span></span>
+    </div>
+  </div>`).join("");
+
+// presets
+const PRESETS={
+  essential:{name:"Essential",desc:"Core platform",ids:[]},
+  recommended:{name:"⭐ Recommended",desc:"Best value",ids:["fees","whatsapp"]},
+  complete:{name:"Complete",desc:"Everything included",ids:CONFIG.addons.map(a=>a.id)}
+};
+function presetPrice(ids){return CONFIG.base.price + ids.reduce((s,id)=>{const a=CONFIG.addons.find(x=>x.id===id);return s+(a?a.price:0);},0);}
+document.getElementById("presetRow").innerHTML = Object.entries(PRESETS).map(([k,p])=>
+  `<button class="preset" data-preset="${k}" data-ids="${p.ids.join(',')}"><div class="pname">${p.name}</div><div class="pdesc">${p.desc} · ${inr(presetPrice(p.ids))}</div></button>`).join("");
+
+// totals helpers
+const oneTimeFeesTotal = CONFIG.oneTimeFees.reduce((s,f)=>s+f.value,0);
+const infraTotal = CONFIG.infrastructure.items.reduce((s,i)=>s+i.value,0);
+const yearlyTotal = infraTotal + CONFIG.support.value;
+
+const moduleEls=[...document.querySelectorAll(".module")];
+function toggle(id){selected.has(id)?selected.delete(id):selected.add(id);syncCards();render();clearActivePreset();}
+function syncCards(){moduleEls.forEach(el=>{const on=selected.has(el.dataset.id);el.classList.toggle("is-selected",on);el.setAttribute("aria-checked",on);});}
+moduleEls.forEach(el=>{
+  el.addEventListener("click",()=>toggle(el.dataset.id));
+  el.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();toggle(el.dataset.id);}});
+});
+const presetEls=[...document.querySelectorAll(".preset")];
+function applyPreset(k){
+  const p=PRESETS[k]; if(!p) return;
+  selected.clear(); p.ids.forEach(i=>selected.add(i));
+  syncCards(); render();
+  presetEls.forEach(b=>b.classList.toggle("active", b.dataset.preset===k));
+}
+presetEls.forEach(btn=>btn.addEventListener("click",()=>applyPreset(btn.dataset.preset)));
+function clearActivePreset(){presetEls.forEach(b=>b.classList.remove("active"));}
+
+function buildOnce(){return CONFIG.base.price + CONFIG.addons.filter(a=>selected.has(a.id)).reduce((s,a)=>s+a.price,0);}
+
+function render(){
+  const chosen=CONFIG.addons.filter(a=>selected.has(a.id));
+  const buildTotal=buildOnce();
+  const onceTotal=buildTotal+oneTimeFeesTotal;
+
+  // summary panel
+  const lines=[`<div class="sum-line base"><span class="nm">${CONFIG.base.title}</span><span>${inr(CONFIG.base.price)}</span></div>`];
+  if(chosen.length===0) lines.push(`<div class="sum-empty">No extras added yet. Tap any feature card to include it.</div>`);
+  else chosen.forEach(a=>lines.push(`<div class="sum-line"><span class="nm"><span class="tick">+</span>${a.name}</span><span>${inr(a.price)}</span></div>`));
+  CONFIG.oneTimeFees.forEach(f=>lines.push(`<div class="sum-line"><span class="nm"><span class="tick">+</span>${f.name}</span><span>${inr(f.value)}</span></div>`));
+  document.getElementById("sumLines").innerHTML=lines.join("");
+
+  document.getElementById("totalOnce").textContent=inr(onceTotal);
+  document.getElementById("onceNote").textContent="Includes your first year of hosting and support.";
+  document.getElementById("thenBlock").innerHTML=`
+    <div class="r-line"><span>Then, each year (from year 2)</span><b>${inr(yearlyTotal)}</b></div>
+    <div class="r-line"><span>Messages to parents</span><b>Only as used</b></div>
+    <div class="sum-note">Year 2 onwards covers hosting and our support. Full breakdown below.</div>`;
+
+  document.getElementById("mbAmt").textContent=inr(onceTotal);
+  document.getElementById("mbThen").textContent="then "+inr(yearlyTotal)+"/year from year 2";
+
+  // ① pay once card
+  document.getElementById("cc-once-amt").innerHTML=inr(onceTotal);
+  const onceItems=[`<li><span>Core platform${chosen.length?" + "+chosen.length+" add-on"+(chosen.length>1?"s":""):""}</span><span class="v">${inr(buildTotal)}</span></li>`];
+  CONFIG.oneTimeFees.forEach(f=>onceItems.push(`<li><span>${f.name}<span class="nt">${f.note}</span></span><span class="v">${inr(f.value)}</span></li>`));
+  document.getElementById("cc-once-items").innerHTML=onceItems.join("");
+  document.getElementById("cc-once-foot").innerHTML=CONFIG.firstYearIncluded?"Your first year of hosting and support is included in this price.":"";
+
+  // ② every year card
+  document.getElementById("cc-year-amt").innerHTML=inr(yearlyTotal)+" <small>/ year</small>";
+  document.getElementById("cc-year-sub").textContent="Starts from year 2. Year 1 is already covered above.";
+  const yItems=CONFIG.infrastructure.items.map(i=>`<li><span>${i.name}<span class="nt">${i.note}</span></span><span class="v">${inr(i.value)}</span></li>`);
+  yItems.push(`<li><span>${CONFIG.support.name}<span class="nt">Our ongoing work, see footer</span></span><span class="v">${inr(CONFIG.support.value)}</span></li>`);
+  document.getElementById("cc-year-items").innerHTML=yItems.join("");
+  document.getElementById("cc-year-total").textContent=inr(yearlyTotal);
+
+  // ③ messages card
+  document.getElementById("cc-use-amt").innerHTML="~"+inr(CONFIG.messaging.estLow)+"–"+inr(CONFIG.messaging.estHigh).replace("₹","")+" <small>/ month</small>";
+  document.getElementById("cc-use-items").innerHTML=CONFIG.messaging.items.map(m=>`<li><span>${m.name}<span class="nt">${m.note}</span></span><span class="v">${m.value}</span></li>`).join("");
+  document.getElementById("cc-use-foot").textContent=CONFIG.messaging.foot;
+
+  // three-year strip
+  document.getElementById("yearRows").innerHTML=`
+    <div class="yrow"><span class="yl"><b>Year 1</b><small>Build the system. Includes the first year of hosting and support</small></span><span class="yv">${inr(onceTotal)}</span></div>
+    <div class="yrow"><span class="yl"><b>Year 2</b><small>Hosting + support</small></span><span class="yv">${inr(yearlyTotal)}</span></div>
+    <div class="yrow"><span class="yl"><b>Year 3</b><small>Hosting + support</small></span><span class="yv">${inr(yearlyTotal)}</span></div>
+    <div class="yrow total"><span class="yl"><b>Three-year total</b><small>Plus messages, only as used</small></span><span class="yv">${inr(onceTotal+yearlyTotal*2)}</span></div>`;
+
+  document.getElementById("cash-foot").textContent=CONFIG.infrastructure.note;
+}
+
+document.getElementById("printBtn").addEventListener("click",()=>window.print());
+
+/* ---- Send this plan to us ---- */
+const sendBtn=document.getElementById("sendBtn");
+const leadForm=document.getElementById("leadForm");
+const lfMsg=document.getElementById("lf-msg");
+sendBtn.addEventListener("click",()=>{
+  const show=leadForm.hidden;
+  leadForm.hidden=!show;
+  sendBtn.textContent=show?"Hide":"Send this plan to us";
+  if(show) document.getElementById("lf-name").focus();
+});
+
+function planSummary(client){
+  const chosen=CONFIG.addons.filter(a=>selected.has(a.id));
+  const buildTotal=buildOnce();
+  const onceTotal=buildTotal+oneTimeFeesTotal;
+  const feat=chosen.length?chosen.map(a=>"• "+a.name.replace(/&amp;/g,"&")).join("\n"):"(foundation only)";
+  return (
+`New School Portal plan request
+
+From: ${client.name||"-"}
+School: ${client.school||"-"}
+Phone: ${client.phone||"-"}
+
+Chosen add-ons:
+${feat}
+
+Pay once (build): ${inr(onceTotal)}
+Every year (from year 2): ${inr(yearlyTotal)}
+Messages: only as used`);
+}
+
+document.getElementById("lf-submit").addEventListener("click",async ()=>{
+  const client={
+    name:document.getElementById("lf-name").value.trim(),
+    school:document.getElementById("lf-school").value.trim(),
+    phone:document.getElementById("lf-phone").value.trim()
+  };
+  if(!client.name && !client.phone){
+    lfMsg.className="lf-msg err";
+    lfMsg.textContent="Please add at least your name or phone so we can reach you.";
+    return;
+  }
+  const summary=planSummary(client);
+  const wa=(CONFIG.lead&&CONFIG.lead.whatsapp||"").replace(/\D/g,"");
+  const key=CONFIG.lead&&CONFIG.lead.web3formsKey;
+
+  // optional: email a copy to the vendor (no backend needed)
+  if(key && key.indexOf("X")===-1){
+    try{
+      await fetch("https://api.web3forms.com/submit",{
+        method:"POST",
+        headers:{"Content-Type":"application/json",Accept:"application/json"},
+        body:JSON.stringify({access_key:key,subject:"New school portal plan request",from_name:client.name||"School",message:summary})
+      });
+    }catch(e){/* ignore — WhatsApp path still works */}
+  }
+
+  // primary: open WhatsApp to the vendor with the plan pre-filled
+  if(wa && wa.indexOf("XXXX")===-1 && /^\d{8,15}$/.test(wa)){
+    window.open("https://wa.me/"+wa+"?text="+encodeURIComponent(summary),"_blank");
+    lfMsg.className="lf-msg";
+    lfMsg.textContent="Opening WhatsApp. Press send and your plan reaches us.";
+  } else if(key && key.indexOf("X")===-1){
+    lfMsg.className="lf-msg";
+    lfMsg.textContent="Thanks. Your plan has reached us and we.ll be in touch soon.";
+  } else {
+    lfMsg.className="lf-msg err";
+    lfMsg.textContent="This proposal isn't set up to receive submissions yet.";
+  }
+});
+
+applyPreset("recommended");
+</script>
+</body>
+</html>
