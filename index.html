@@ -353,7 +353,7 @@
     <div class="foot-contact">
       <h3>Next step</h3>
       <p>Pick the features above and send us the plan. We'll confirm the timeline and get started.</p>
-      <p>Payment can be staged across the build, for example 40% to begin, 30% at the testing stage, and 30% on go-live. Your first 6 months of Managed Hosting &amp; Support are included, and monthly billing starts from month 7.</p>
+      <p>Payment can be staged across the build, for example 40% to begin, 30% at the testing stage, and 30% on go-live. Your first month of Managed Hosting &amp; Support is included, and monthly billing starts from month 2.</p>
       <div class="c-row" id="c-name"></div>
       <div class="c-row" id="c-email"></div>
       <div class="c-row" id="c-phone"></div>
@@ -430,7 +430,7 @@ const CONFIG = {
       "Installation",
       "Data Migration",
       "Staff Training",
-      "First 6 Months Hosting & Support"
+      "First Month Hosting & Support"
     ]
   },
   addons:[
@@ -443,9 +443,8 @@ const CONFIG = {
 
   /* small one-time store fees are absorbed into the build above, so the headline stays clean */
   oneTimeFees:[],
-  /* the first months of hosting + support are bundled into the build above */
-  includedMonths:6,          // months 1–6 are covered by the build cost
-  billsFromMonth:7,          // monthly billing begins at month 7
+  /* first month of hosting + support is bundled into the build above */
+  firstMonthIncluded:true,
 
   /* ---- ② MONTHLY: Managed Hosting & Support ----
      One simple price. The client never sees our underlying provider bills —
@@ -454,7 +453,7 @@ const CONFIG = {
     name:"Managed Hosting & Support",
     sub:"Everything required to keep your portal secure, updated and running smoothly.",
     monthly:7500,
-    startsNote:"Starts from month 7. The first 6 months are already included in the build cost.",
+    startsNote:"Starts from month 2. Month 1 is already included in the build cost.",
     includes:[
       "Secure Cloud Hosting",
       "Managed Database",
@@ -552,9 +551,8 @@ document.getElementById("presetRow").innerHTML = Object.entries(PRESETS).map(([k
 
 // totals helpers
 const oneTimeFeesTotal = CONFIG.oneTimeFees.reduce((s,f)=>s+f.value,0);
-const monthly = CONFIG.managed.monthly;          // ₹/month, billed from month 7
-const INCLUDED_MONTHS = CONFIG.includedMonths;   // months 1–6 covered by the build
-const PAID_MONTHS_3YR = 36 - INCLUDED_MONTHS;    // billed months over 36 (= 30)
+const monthly = CONFIG.managed.monthly;          // ₹/month, billed from month 2
+const PAID_MONTHS_3YR = 35;                       // 36 months total − month 1 (in build)
 
 const moduleEls=[...document.querySelectorAll(".module")];
 function toggle(id){selected.has(id)?selected.delete(id):selected.add(id);syncCards();render();clearActivePreset();}
@@ -608,14 +606,14 @@ function render(){
     <div class="sum-note">${CONFIG.managed.startsNote}</div>`;
 
   document.getElementById("mbAmt").textContent=inr(onceTotal);
-  document.getElementById("mbThen").textContent="then "+inr(monthly)+"/month from month "+CONFIG.billsFromMonth;
+  document.getElementById("mbThen").textContent="then "+inr(monthly)+"/month from month 2";
 
   // ① pay once card
   document.getElementById("cc-once-amt").innerHTML=inr(onceTotal);
   const onceItems=[`<li><span>Core platform${chosen.length?" + "+chosen.length+" add-on"+(chosen.length>1?"s":""):""}</span><span class="v">${inr(buildTotal)}</span></li>`];
   CONFIG.oneTimeFees.forEach(f=>onceItems.push(`<li><span>${f.name}<span class="nt">${f.note}</span></span><span class="v">${inr(f.value)}</span></li>`));
   document.getElementById("cc-once-items").innerHTML=onceItems.join("");
-  document.getElementById("cc-once-foot").innerHTML="Your first "+INCLUDED_MONTHS+" months of Managed Hosting &amp; Support are included in this price.";
+  document.getElementById("cc-once-foot").innerHTML=CONFIG.firstMonthIncluded?"Your first month of Managed Hosting &amp; Support is included in this price.":"";
 
   // ② every month card — single price, value-led, no internal cost breakdown
   document.getElementById("cc-month-amt").innerHTML=inr(monthly)+" <small>/ month</small>";
@@ -627,18 +625,16 @@ function render(){
   document.getElementById("cc-use-items").innerHTML=CONFIG.messaging.items.map(m=>`<li><span>${m.name}<span class="nt">${m.note}</span></span><span class="v">${m.value}</span></li>`).join("");
   document.getElementById("cc-use-foot").textContent=CONFIG.messaging.foot;
 
-  // 36-month strip (months 1–6 sit inside the build cost; monthly bills from month 7)
-  const startM=CONFIG.billsFromMonth;              // 7
-  const firstRange=12-startM+1;                    // months 7–12 → 6 paid months
-  const mFirst=monthly*firstRange, m13to24=monthly*12, m25to36=monthly*12;
+  // 36-month strip (month 1 sits inside the build cost; monthly bills from month 2)
+  const m2to12=monthly*11, m13to24=monthly*12, m25to36=monthly*12;
   document.getElementById("yearRows").innerHTML=`
-    <div class="yrow"><span class="yl"><b>Build cost</b><small>One-time. Includes your first ${INCLUDED_MONTHS} months of hosting &amp; support</small></span><span class="yv">${inr(onceTotal)}</span></div>
-    <div class="yrow"><span class="yl"><b>Months ${startM}–12</b><small>Managed Hosting &amp; Support · ${inr(monthly)}/month × ${firstRange}</small></span><span class="yv">${inr(mFirst)}</span></div>
+    <div class="yrow"><span class="yl"><b>Build cost</b><small>One-time. Includes your first month of hosting &amp; support</small></span><span class="yv">${inr(onceTotal)}</span></div>
+    <div class="yrow"><span class="yl"><b>Months 2–12</b><small>Managed Hosting &amp; Support · ${inr(monthly)}/month × 11</small></span><span class="yv">${inr(m2to12)}</span></div>
     <div class="yrow"><span class="yl"><b>Months 13–24</b><small>${inr(monthly)}/month × 12</small></span><span class="yv">${inr(m13to24)}</span></div>
     <div class="yrow"><span class="yl"><b>Months 25–36</b><small>${inr(monthly)}/month × 12</small></span><span class="yv">${inr(m25to36)}</span></div>
     <div class="yrow total"><span class="yl"><b>36-month total</b><small>Plus messages, only as used</small></span><span class="yv">${inr(onceTotal+monthly*PAID_MONTHS_3YR)}</span></div>`;
 
-  document.getElementById("cash-foot").textContent="One simple monthly price covers all hosting, infrastructure, security and support — billed from month "+CONFIG.billsFromMonth+". Messages to parents are billed separately, only as actually used.";
+  document.getElementById("cash-foot").textContent="One simple monthly price covers all hosting, infrastructure, security and support — billed from month 2. Messages to parents are billed separately, only as actually used.";
 }
 
 document.getElementById("printBtn").addEventListener("click",()=>window.print());
@@ -669,8 +665,8 @@ Phone: ${client.phone||"-"}
 Chosen add-ons:
 ${feat}
 
-Pay once (build, incl. first ${INCLUDED_MONTHS} months): ${inr(onceTotal)}
-Managed Hosting & Support: ${inr(monthly)}/month (from month ${CONFIG.billsFromMonth})
+Pay once (build, incl. first month): ${inr(onceTotal)}
+Managed Hosting & Support: ${inr(monthly)}/month (from month 2)
 Messages: only as used`);
 }
 
