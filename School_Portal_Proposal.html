@@ -109,10 +109,22 @@
   .sum-total .row .k{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
   .sum-total .big{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;color:var(--ink)}
   .sum-total .once{font-size:12px;color:var(--muted);margin-top:2px}
-  .sum-then{padding:12px 20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft)}
-  .sum-then .r-line{display:flex;justify-content:space-between;padding:3px 0}
-  .sum-then b{color:var(--ink)}
-  .sum-note{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5}
+  .sum-then{padding:16px 20px 18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft)}
+  .sum-note{font-size:11.5px;color:var(--muted);margin-top:12px;line-height:1.5}
+  /* "Includes" caption + tick list shared by the Pay-once and monthly cards */
+  .incl-cap{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:12px 0 6px}
+  .sum-incl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;font-size:12.5px}
+  .sum-incl li{position:relative;padding:4px 0 4px 19px;color:var(--ink-soft)}
+  .sum-incl li::before{content:"";position:absolute;left:0;top:8px;width:12px;height:12px;border-radius:50%;background:var(--included-soft);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232C7C58' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");background-size:8px;background-repeat:no-repeat;background-position:center}
+  /* monthly subscription card inside the sidebar */
+  .then-card{background:#fbfdfd;border:1px solid var(--line);border-radius:12px;padding:14px 14px 16px}
+  .then-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .then-head .then-name{font-weight:700;font-size:13.5px;color:var(--ink)}
+  .then-head .then-amt{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;color:var(--brand-dark);white-space:nowrap}
+  .then-head .then-amt small{font-size:11px;color:var(--muted);font-weight:500}
+  .then-msg{margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+  .then-msg .then-msg-t{font-weight:700;font-size:12.5px;color:var(--ink)}
+  .then-msg .then-msg-d{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5}
   .sum-actions{padding:14px 20px 18px;display:flex;gap:10px;flex-direction:column}
   .leadform{display:flex;flex-direction:column;gap:9px;margin-top:4px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfdfd}
   .leadform .lf-title{font-weight:700;font-size:13.5px;margin-bottom:2px}
@@ -128,18 +140,27 @@
 
   /* ===== complete cash-flow section ===== */
   .cash{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .cash .wrap{padding:40px 22px 14px}
-  .cash .lead h2{font-size:23px;margin:0 0 6px}
-  .cash .lead p{margin:0 0 4px;color:var(--ink-soft);font-size:15px;max-width:660px}
-  .cash-cards{display:grid;grid-template-columns:1fr;gap:16px;margin:24px 0 8px}
+  .cash .wrap{padding:56px 22px 18px}
+  .cash .lead h2{font-size:clamp(24px,3vw,29px);margin:0 0 8px;font-weight:700}
+  .cash .lead p{margin:0 0 4px;color:var(--ink-soft);font-size:15.5px;max-width:660px}
+  .cash-cards{display:grid;grid-template-columns:1fr;gap:18px;margin:32px 0 10px}
   @media(min-width:820px){.cash-cards{grid-template-columns:repeat(3,1fr)}}
   .cc{border:1px solid var(--line);border-radius:var(--radius);padding:20px;background:#fff;display:flex;flex-direction:column}
   .cc .cc-tag{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 10px;border-radius:20px;align-self:flex-start}
   .cc.once .cc-tag{background:var(--accent-soft);color:#9a5a12}
-  .cc.year .cc-tag{background:#E6F0F2;color:var(--brand-dark)}
+  .cc.month .cc-tag{background:#E6F0F2;color:var(--brand-dark)}
   .cc.use  .cc-tag{background:var(--included-soft);color:var(--included)}
+  /* checklist for the monthly managed-service card (no per-item pricing) */
+  .cc-checks{list-style:none;margin:12px 0 0;padding:14px 0 0;border-top:1px dashed var(--line);font-size:13px;columns:2;column-gap:22px}
+  @media(max-width:520px){.cc-checks{columns:1}}
+  .cc-checks li{break-inside:avoid;position:relative;padding:6px 0 6px 24px;color:var(--ink-soft)}
+  .cc-checks li::before{content:"";position:absolute;left:0;top:9px;width:15px;height:15px;border-radius:50%;background:var(--included-soft);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232C7C58' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");background-size:10px;background-repeat:no-repeat;background-position:center}
   .cc h3{font-size:16px;margin:14px 0 2px}
-  .cc .cc-amt{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;margin:6px 0 2px}
+  .cc .cc-amt{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:27px;margin:6px 0 2px}
+  .cc.once .cc-amt{color:#9a5a12}
+  .cc.month .cc-amt{color:var(--brand-dark)}
+  /* the two primary cards (build + monthly) carry slightly more visual weight than usage */
+  .cc.once,.cc.month{box-shadow:var(--shadow)}
   .cc .cc-amt small{font-size:13px;color:var(--muted);font-weight:500}
   .cc .cc-sub{font-size:12.5px;color:var(--muted);margin-bottom:12px}
   .cc .cc-items{list-style:none;margin:8px 0 0;padding:0;font-size:13px;border-top:1px dashed var(--line)}
@@ -256,7 +277,7 @@
         <div class="sum-lines" id="sumLines"></div>
         <div class="sum-divider"></div>
         <div class="sum-total">
-          <div class="row"><span class="k">Pay once (to build it)</span><span class="big" id="totalOnce"></span></div>
+          <div class="row"><span class="k">Pay once</span><span class="big" id="totalOnce"></span></div>
           <div class="once" id="onceNote"></div>
         </div>
         <div class="sum-then" id="thenBlock"></div>
@@ -282,7 +303,7 @@
   <div class="wrap">
     <div class="lead">
       <h2>What it costs, in full</h2>
-      <p>Here is what the school pays, and when. There are three kinds of cost.</p>
+      <p>Three simple parts: you pay once to build it, a small monthly price keeps everything running, and messaging is charged only if you actually use it.</p>
     </div>
 
     <div class="cash-cards">
@@ -295,13 +316,12 @@
         <div class="cc-foot" id="cc-once-foot"></div>
       </div>
 
-      <div class="cc year">
-        <span class="cc-tag">② Every year</span>
-        <h3>Keeping it running</h3>
-        <div class="cc-amt" id="cc-year-amt"></div>
-        <div class="cc-sub" id="cc-year-sub"></div>
-        <ul class="cc-items" id="cc-year-items"></ul>
-        <div class="cc-total"><span class="k">Total each year</span><span class="v" id="cc-year-total"></span></div>
+      <div class="cc month">
+        <span class="cc-tag">② Every month</span>
+        <h3>Managed Hosting &amp; Support</h3>
+        <div class="cc-amt" id="cc-month-amt"></div>
+        <div class="cc-sub" id="cc-month-sub"></div>
+        <ul class="cc-checks" id="cc-month-items"></ul>
       </div>
 
       <div class="cc use">
@@ -315,7 +335,7 @@
     </div>
 
     <div class="years">
-      <div class="yhead"><span>What it looks like over three years</span><span class="ynote">Messages billed separately, only as used</span></div>
+      <div class="yhead"><span>Your costs over 36 months</span><span class="ynote">Messages billed separately, only as used</span></div>
       <div id="yearRows"></div>
     </div>
 
@@ -326,14 +346,14 @@
 <footer class="foot" id="contact">
   <div class="wrap">
     <div>
-      <h3>What "keeping it running" includes</h3>
+      <h3>What Managed Hosting &amp; Support includes</h3>
       <ul id="supportIncludes"></ul>
       <p class="foot-terms" id="foot-terms"></p>
     </div>
     <div class="foot-contact">
       <h3>Next step</h3>
       <p>Pick the features above and send us the plan. We'll confirm the timeline and get started.</p>
-      <p>Payment can be staged across the build, for example 40% to begin, 30% at the testing stage, and 30% on go-live. Your first year of hosting and support is included.</p>
+      <p>Payment can be staged across the build, for example 40% to begin, 30% at the testing stage, and 30% on go-live. Your first month of Managed Hosting &amp; Support is included, and monthly billing starts from month 2.</p>
       <div class="c-row" id="c-name"></div>
       <div class="c-row" id="c-email"></div>
       <div class="c-row" id="c-phone"></div>
@@ -360,7 +380,7 @@
 const CONFIG = {
   vendor:{
     name:"Built by Anaswer Ajay",
-    lede:"Choose the features your school needs and the total updates as you go. You'll see what it costs to build, and what it costs to run each year.",
+    lede:"Choose the features your school needs and the total updates as you go. You'll see what it costs to build once, and the simple monthly price to keep it running.",
     validity:"Estimate valid for 30 days",
     contactName:"Anaswer Ajay",
     contactEmail:"anaswer.impluse@gmail.com",
@@ -400,6 +420,17 @@ const CONFIG = {
       "We import your existing student data for you",
       "App Store and Play Store publishing handled for you",
       "Full change history (who edited what, and when)"
+    ],
+    /* short, client-friendly checklist shown in the sidebar "Pay once" card */
+    summary:[
+      "Complete School Platform",
+      "Android App",
+      "iPhone App",
+      "Web Dashboard",
+      "Installation",
+      "Data Migration",
+      "Staff Training",
+      "First Month Hosting & Support"
     ]
   },
   addons:[
@@ -412,28 +443,54 @@ const CONFIG = {
 
   /* small one-time store fees are absorbed into the build above, so the headline stays clean */
   oneTimeFees:[],
-  /* first-year line: hosting + support for year one is bundled into the build above */
-  firstYearIncluded:true,
+  /* first month of hosting + support is bundled into the build above */
+  firstMonthIncluded:true,
 
-  /* ---- ② EVERY YEAR: hosting + support (recalculated at USD = ₹96, sized for a 300–500 student school) ---- */
-  infrastructure:{
-    note:"These go to the service providers, not to us, and are billed in US dollars, so the rupee figure can move a little with the exchange rate. Sized for a small school and shown at actual cost.",
-    items:[
-      {name:"Cloud hosting (servers, database, backups)", value:24000, note:"Sized for 300–500 students"},
-      {name:"Apple App Store account",                    value:9500,  note:"Apple's yearly fee to keep the iPhone app live"},
-      {name:"Domain name (web address)",                  value:1200,  note:"Your portal's address"}
-    ]
-  },
-  support:{
-    name:"Support &amp; maintenance (our work)",
-    value:32000,
+  /* ---- ② MONTHLY: Managed Hosting & Support ----
+     One simple price. The client never sees our underlying provider bills —
+     only the value they receive. Internal cost reference is in _internal below. */
+  managed:{
+    name:"Managed Hosting & Support",
+    sub:"Everything required to keep your portal secure, updated and running smoothly.",
+    monthly:7500,
+    startsNote:"Starts from month 2. Month 1 is already included in the build cost.",
     includes:[
-      "Keeping the app working as phones and operating systems update",
-      "Security updates and bug fixes",
-      "Re-publishing the app whenever Apple or Google require it",
-      "Setting up each new academic year",
-      "Email and phone support for your office staff and teachers"
-    ]
+      "Secure Cloud Hosting",
+      "Managed Database",
+      "Daily Backups",
+      "Monitoring",
+      "Security Updates",
+      "Bug Fixes",
+      "Android & iPhone App Support",
+      "Store Account Renewals",
+      "Priority Technical Support",
+      "Academic Year Setup",
+      "Performance Monitoring"
+    ],
+    /* short, client-friendly checklist shown in the sidebar monthly card */
+    summary:["Hosting","Database","Security","Updates","Support","Store Renewals"]
+  },
+
+  /* ---- INTERNAL ONLY — never rendered to the client ----
+     Realistic 2026 cost basis behind the ₹7,500/month price, so you can see the margin.
+     FX assumed ₹88/USD (range ₹87–90).
+       Supabase Pro          $25/mo + ~10% tax ≈ $27.5  → ~₹2,420/mo
+       Apple Developer       $99/yr                     → ~₹726/mo   ($99×88÷12)
+       Google Play           $25 one-time               → ~₹61/mo    (amortised over 3 yrs)
+       Domain                ₹1,200/yr                  → ₹100/mo
+       SMS/transactional gateway base, monitoring tools → ~₹400/mo (buffer)
+     ─────────────────────────────────────────────
+       Infra subtotal        ≈ ₹3,700/mo
+       Support labour buffer ≈ ₹1,000/mo
+       True cost             ≈ ₹4,700/mo
+       Price                 ₹7,500/mo  →  healthy gross margin (~₹2,800/mo) */
+  _internal:{
+    fxInr:88,
+    supabaseUsdMonthly:27.5,
+    appleUsdYearly:99,
+    googlePlayUsdOnce:25,
+    domainInrYearly:1200,
+    estTrueMonthlyCost:4700
   },
 
   /* ---- ③ PAY-AS-YOU-USE: messages ---- */
@@ -442,7 +499,7 @@ const CONFIG = {
     items:[
       {name:"App notifications", value:"Free", note:"Sent inside the app, no cost"},
       {name:"SMS (login codes, absence)", value:"~₹0.20 each", note:"Only for what you send"},
-      {name:"WhatsApp messages", value:"From ~₹0.15 each", note:"+ ₹500/month per WhatsApp number"}
+      {name:"WhatsApp messages", value:"From ~₹0.15 each", note:"Optional: only if you choose to enable a WhatsApp Business number"}
     ],
     foot:"Most of the time you'll use the free app alerts, so this usually comes to a few hundred rupees a month."
   }
@@ -465,7 +522,7 @@ document.getElementById("c-phone").textContent    = CONFIG.vendor.contactPhone;
 document.getElementById("foot-terms").textContent =
   "All amounts are in Indian Rupees (INR) and are an estimate, not a final invoice. " + CONFIG.vendor.validity + ".";
 document.getElementById("supportIncludes").innerHTML =
-  CONFIG.support.includes.map(t=>"<li>"+t+"</li>").join("");
+  CONFIG.managed.includes.map(t=>"<li>"+t+"</li>").join("");
 
 // core list
 document.getElementById("coreList").innerHTML = CONFIG.base.includes.map(t=>"<li>"+t+"</li>").join("");
@@ -494,8 +551,8 @@ document.getElementById("presetRow").innerHTML = Object.entries(PRESETS).map(([k
 
 // totals helpers
 const oneTimeFeesTotal = CONFIG.oneTimeFees.reduce((s,f)=>s+f.value,0);
-const infraTotal = CONFIG.infrastructure.items.reduce((s,i)=>s+i.value,0);
-const yearlyTotal = infraTotal + CONFIG.support.value;
+const monthly = CONFIG.managed.monthly;          // ₹/month, billed from month 2
+const PAID_MONTHS_3YR = 35;                       // 36 months total − month 1 (in build)
 
 const moduleEls=[...document.querySelectorAll(".module")];
 function toggle(id){selected.has(id)?selected.delete(id):selected.add(id);syncCards();render();clearActivePreset();}
@@ -529,43 +586,55 @@ function render(){
   document.getElementById("sumLines").innerHTML=lines.join("");
 
   document.getElementById("totalOnce").textContent=inr(onceTotal);
-  document.getElementById("onceNote").textContent="Includes your first year of hosting and support.";
+  document.getElementById("onceNote").innerHTML=
+    `<div class="incl-cap">Includes</div><ul class="sum-incl">`
+    + CONFIG.base.summary.map(t=>`<li>${t}</li>`).join("")
+    + `</ul>`;
   document.getElementById("thenBlock").innerHTML=`
-    <div class="r-line"><span>Then, each year (from year 2)</span><b>${inr(yearlyTotal)}</b></div>
-    <div class="r-line"><span>Messages to parents</span><b>Only as used</b></div>
-    <div class="sum-note">Year 2 onwards covers hosting and our support. Full breakdown below.</div>`;
+    <div class="then-card">
+      <div class="then-head">
+        <span class="then-name">Managed Hosting &amp; Support</span>
+        <span class="then-amt">${inr(monthly)}<small>/month</small></span>
+      </div>
+      <div class="incl-cap">Includes</div>
+      <ul class="sum-incl">${CONFIG.managed.summary.map(t=>`<li>${t}</li>`).join("")}</ul>
+    </div>
+    <div class="then-msg">
+      <div class="then-msg-t">Messaging</div>
+      <div class="then-msg-d">Only pay for SMS and WhatsApp usage. No monthly commitment.</div>
+    </div>
+    <div class="sum-note">${CONFIG.managed.startsNote}</div>`;
 
   document.getElementById("mbAmt").textContent=inr(onceTotal);
-  document.getElementById("mbThen").textContent="then "+inr(yearlyTotal)+"/year from year 2";
+  document.getElementById("mbThen").textContent="then "+inr(monthly)+"/month from month 2";
 
   // ① pay once card
   document.getElementById("cc-once-amt").innerHTML=inr(onceTotal);
   const onceItems=[`<li><span>Core platform${chosen.length?" + "+chosen.length+" add-on"+(chosen.length>1?"s":""):""}</span><span class="v">${inr(buildTotal)}</span></li>`];
   CONFIG.oneTimeFees.forEach(f=>onceItems.push(`<li><span>${f.name}<span class="nt">${f.note}</span></span><span class="v">${inr(f.value)}</span></li>`));
   document.getElementById("cc-once-items").innerHTML=onceItems.join("");
-  document.getElementById("cc-once-foot").innerHTML=CONFIG.firstYearIncluded?"Your first year of hosting and support is included in this price.":"";
+  document.getElementById("cc-once-foot").innerHTML=CONFIG.firstMonthIncluded?"Your first month of Managed Hosting &amp; Support is included in this price.":"";
 
-  // ② every year card
-  document.getElementById("cc-year-amt").innerHTML=inr(yearlyTotal)+" <small>/ year</small>";
-  document.getElementById("cc-year-sub").textContent="Starts from year 2. Year 1 is already covered above.";
-  const yItems=CONFIG.infrastructure.items.map(i=>`<li><span>${i.name}<span class="nt">${i.note}</span></span><span class="v">${inr(i.value)}</span></li>`);
-  yItems.push(`<li><span>${CONFIG.support.name}<span class="nt">Our ongoing work, see footer</span></span><span class="v">${inr(CONFIG.support.value)}</span></li>`);
-  document.getElementById("cc-year-items").innerHTML=yItems.join("");
-  document.getElementById("cc-year-total").textContent=inr(yearlyTotal);
+  // ② every month card — single price, value-led, no internal cost breakdown
+  document.getElementById("cc-month-amt").innerHTML=inr(monthly)+" <small>/ month</small>";
+  document.getElementById("cc-month-sub").textContent=CONFIG.managed.startsNote;
+  document.getElementById("cc-month-items").innerHTML=CONFIG.managed.includes.map(t=>`<li>${t}</li>`).join("");
 
   // ③ messages card
   document.getElementById("cc-use-amt").innerHTML="~"+inr(CONFIG.messaging.estLow)+"–"+inr(CONFIG.messaging.estHigh).replace("₹","")+" <small>/ month</small>";
   document.getElementById("cc-use-items").innerHTML=CONFIG.messaging.items.map(m=>`<li><span>${m.name}<span class="nt">${m.note}</span></span><span class="v">${m.value}</span></li>`).join("");
   document.getElementById("cc-use-foot").textContent=CONFIG.messaging.foot;
 
-  // three-year strip
+  // 36-month strip (month 1 sits inside the build cost; monthly bills from month 2)
+  const m2to12=monthly*11, m13to24=monthly*12, m25to36=monthly*12;
   document.getElementById("yearRows").innerHTML=`
-    <div class="yrow"><span class="yl"><b>Year 1</b><small>Build the system. Includes the first year of hosting and support</small></span><span class="yv">${inr(onceTotal)}</span></div>
-    <div class="yrow"><span class="yl"><b>Year 2</b><small>Hosting + support</small></span><span class="yv">${inr(yearlyTotal)}</span></div>
-    <div class="yrow"><span class="yl"><b>Year 3</b><small>Hosting + support</small></span><span class="yv">${inr(yearlyTotal)}</span></div>
-    <div class="yrow total"><span class="yl"><b>Three-year total</b><small>Plus messages, only as used</small></span><span class="yv">${inr(onceTotal+yearlyTotal*2)}</span></div>`;
+    <div class="yrow"><span class="yl"><b>Build cost</b><small>One-time. Includes your first month of hosting &amp; support</small></span><span class="yv">${inr(onceTotal)}</span></div>
+    <div class="yrow"><span class="yl"><b>Months 2–12</b><small>Managed Hosting &amp; Support · ${inr(monthly)}/month × 11</small></span><span class="yv">${inr(m2to12)}</span></div>
+    <div class="yrow"><span class="yl"><b>Months 13–24</b><small>${inr(monthly)}/month × 12</small></span><span class="yv">${inr(m13to24)}</span></div>
+    <div class="yrow"><span class="yl"><b>Months 25–36</b><small>${inr(monthly)}/month × 12</small></span><span class="yv">${inr(m25to36)}</span></div>
+    <div class="yrow total"><span class="yl"><b>36-month total</b><small>Plus messages, only as used</small></span><span class="yv">${inr(onceTotal+monthly*PAID_MONTHS_3YR)}</span></div>`;
 
-  document.getElementById("cash-foot").textContent=CONFIG.infrastructure.note;
+  document.getElementById("cash-foot").textContent="One simple monthly price covers all hosting, infrastructure, security and support — billed from month 2. Messages to parents are billed separately, only as actually used.";
 }
 
 document.getElementById("printBtn").addEventListener("click",()=>window.print());
@@ -596,8 +665,8 @@ Phone: ${client.phone||"-"}
 Chosen add-ons:
 ${feat}
 
-Pay once (build): ${inr(onceTotal)}
-Every year (from year 2): ${inr(yearlyTotal)}
+Pay once (build, incl. first month): ${inr(onceTotal)}
+Managed Hosting & Support: ${inr(monthly)}/month (from month 2)
 Messages: only as used`);
 }
 
