@@ -186,6 +186,44 @@
   .yrow.total .yv{color:#9a5a12}
   .cash .foot-line{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.6}
 
+  /* ===== VISUAL HIERARCHY: make the one-time build the hero, usage the quietest =====
+     Same three cards, but the amount sizes now signal importance:
+     Project Investment (34px) > Managed Hosting (27px) > Usage (21px). */
+  .cc.once .cc-amt{font-size:34px}          /* ⭐⭐⭐⭐⭐ primary — the headline the school approves */
+  .cc.once{border-color:#BFDDDA}            /* subtle brand-tinted ring to mark it as the primary card */
+  .cc.use  .cc-amt{font-size:21px}          /* ⭐⭐⭐ secondary — usage is small & unintimidating */
+
+  /* ===== PAYMENT SCHEDULE — staged, so the build never reads as one scary lump ===== */
+  .payschedule{margin:28px 0 6px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow);padding:20px}
+  .payschedule .ps-title{font-size:16px;font-weight:700;margin:0}
+  .payschedule .ps-sub{font-size:12.5px;color:var(--muted);margin:4px 0 16px}
+  .ps-steps{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:640px){.ps-steps{grid-template-columns:repeat(3,1fr)}}
+  .ps-step{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fbfdfd}
+  .ps-step .ps-pct{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:var(--brand-dark)}
+  .ps-step .ps-when{font-size:13px;color:var(--ink-soft);font-weight:600;margin-top:2px}
+  .ps-step .ps-note{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+
+  /* ===== OPTIONAL LONG-TERM ESTIMATE — collapsed, muted, informational (no orange) =====
+     Native <details>, so no JS and no new dependency. Replaces the old prominent
+     "Your costs over 36 months" strip that caused the sticker shock. */
+  .ltb{margin:22px 0 6px;border:1px solid var(--line);border-radius:var(--radius);background:#fbfdfd;overflow:hidden}
+  .ltb>summary{list-style:none;cursor:pointer;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .ltb>summary::-webkit-details-marker{display:none}
+  .ltb .ltb-t{display:flex;flex-direction:column;gap:2px}
+  .ltb .ltb-t b{font-size:14px;font-weight:600;color:var(--ink-soft)}
+  .ltb .ltb-t small{font-size:12px;color:var(--muted)}
+  .ltb .ltb-chev{color:var(--muted);font-size:12px;transition:transform .2s;flex:none}
+  .ltb[open]>summary .ltb-chev{transform:rotate(180deg)}
+  .ltb-body{padding:0 18px 8px}
+  /* neutralise the year rows inside the accordion: small type, muted, and crucially
+     the total is NO longer orange/highlighted — it reads as reference, not a price tag */
+  .ltb .yrow{padding:10px 0;font-size:13px}
+  .ltb .yrow .yv{font-size:14px;color:var(--ink-soft);font-weight:600}
+  .ltb .yrow.total{background:transparent}
+  .ltb .yrow.total .yl b{color:var(--ink-soft)}
+  .ltb .yrow.total .yv{color:var(--ink-soft)}
+
   /* mobile bar */
   .mobilebar{display:none}
   @media(max-width:919px){
@@ -217,6 +255,10 @@
     .module:not(.is-selected){display:none}
     .layout{padding-bottom:20px}
     footer.foot{padding-bottom:30px}
+    /* transparency on paper: the optional long-term estimate is forced visible in print
+       (JS also sets [open] before printing; this hides the now-pointless chevron) */
+    .ltb .ltb-chev{display:none}
+    .ltb>summary{cursor:default}
   }
 </style>
 </head>
@@ -302,23 +344,23 @@
 <section class="cash" id="cashflow">
   <div class="wrap">
     <div class="lead">
-      <h2>What it costs, in full</h2>
-      <p>Three simple parts: you pay once to build it, a small monthly price keeps everything running, and messaging is charged only if you actually use it.</p>
+      <h2>Project Investment</h2>
+      <p>Three simple parts: a one-time build to launch it, a small monthly price to keep everything running, and messaging charged only if you actually use it.</p>
     </div>
 
     <div class="cash-cards">
       <div class="cc once">
         <span class="cc-tag">① Pay once</span>
-        <h3>Building the system</h3>
+        <h3>Initial Build &amp; Launch</h3>
         <div class="cc-amt" id="cc-once-amt"></div>
-        <div class="cc-sub">A one-time cost. After this, the school owns the system.</div>
+        <div class="cc-sub">Complete development, deployment, testing and your first month of Managed Hosting &amp; Support. After this, the school owns the system.</div>
         <ul class="cc-items" id="cc-once-items"></ul>
         <div class="cc-foot" id="cc-once-foot"></div>
       </div>
 
       <div class="cc month">
         <span class="cc-tag">② Every month</span>
-        <h3>Managed Hosting &amp; Support</h3>
+        <h3>Ongoing Managed Hosting &amp; Support</h3>
         <div class="cc-amt" id="cc-month-amt"></div>
         <div class="cc-sub" id="cc-month-sub"></div>
         <ul class="cc-checks" id="cc-month-items"></ul>
@@ -326,18 +368,40 @@
 
       <div class="cc use">
         <span class="cc-tag">③ Only what you use</span>
-        <h3>Messages to parents</h3>
+        <h3>Usage-Based Services</h3>
         <div class="cc-amt" id="cc-use-amt"></div>
-        <div class="cc-sub">Pay only for what is actually sent. No fixed fee.</div>
+        <div class="cc-sub">Only pay for what you use. No fixed fee.</div>
         <ul class="cc-items" id="cc-use-items"></ul>
         <div class="cc-foot" id="cc-use-foot"></div>
       </div>
     </div>
 
-    <div class="years">
-      <div class="yhead"><span>Your costs over 36 months</span><span class="ynote">Messages billed separately, only as used</span></div>
-      <div id="yearRows"></div>
+    <!-- PAYMENT SCHEDULE — the build is staged 40/30/30, so it never reads as one lump sum -->
+    <div class="payschedule">
+      <div class="ps-title">Payment schedule</div>
+      <div class="ps-sub">The one-time build is paid in three simple stages — nothing is due all at once.</div>
+      <div class="ps-steps">
+        <div class="ps-step"><div class="ps-pct">40%</div><div class="ps-when">Project start</div><div class="ps-note">To begin development.</div></div>
+        <div class="ps-step"><div class="ps-pct">30%</div><div class="ps-when">Development complete</div><div class="ps-note">At the testing stage.</div></div>
+        <div class="ps-step"><div class="ps-pct">30%</div><div class="ps-when">Go live</div><div class="ps-note">On launch. First month of hosting &amp; support included.</div></div>
+      </div>
     </div>
+
+    <!-- OPTIONAL LONG-TERM ESTIMATE — collapsed by default so it doesn't anchor the price.
+         Same #yearRows container → the existing 36-month calculation is rendered unchanged,
+         just presented as muted, informational reference. Forced open in print (see CSS/JS). -->
+    <details class="ltb">
+      <summary>
+        <span class="ltb-t">
+          <b>Estimated Long-Term Budget (Optional)</b>
+          <small>A 3-year reference — build cost plus monthly hosting. Messages billed separately, only as used.</small>
+        </span>
+        <span class="ltb-chev">▼</span>
+      </summary>
+      <div class="ltb-body">
+        <div id="yearRows"></div>
+      </div>
+    </details>
 
     <p class="foot-line" id="cash-foot"></p>
   </div>
@@ -637,7 +701,14 @@ function render(){
   document.getElementById("cash-foot").textContent="One simple monthly price covers all hosting, infrastructure, security and support — billed from month 2. Messages to parents are billed separately, only as actually used.";
 }
 
-document.getElementById("printBtn").addEventListener("click",()=>window.print());
+/* Force the optional long-term estimate OPEN whenever the page is printed, so a saved
+   PDF never silently drops those costs. Covers the app's own button, native Cmd/Ctrl+P
+   (beforeprint) and Safari (matchMedia). It is only ever forced open here, never closed. */
+const ltb=document.querySelector(".ltb");
+function openLtbForPrint(){ if(ltb) ltb.open=true; }
+document.getElementById("printBtn").addEventListener("click",()=>{openLtbForPrint();window.print();});
+window.addEventListener("beforeprint",openLtbForPrint);
+if(window.matchMedia){window.matchMedia("print").addEventListener("change",e=>{if(e.matches)openLtbForPrint();});}
 
 /* ---- Send this plan to us ---- */
 const sendBtn=document.getElementById("sendBtn");
